@@ -1,6 +1,6 @@
 # Ozonetel
 
-TODO: Write a gem description
+Ruby interface for ozonetel APIs
 
 ## Installation
 
@@ -20,7 +20,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Setup
+
+require 'ozonetel'
+
+@client = Ozonetel::Client.new(customer, api_key, campaign_name)
+
+### Make an outgoing call
+
+  @client.agent_manual_dial(agent_id, customer_number)
 
 ## Requirements
 

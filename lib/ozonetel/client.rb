@@ -11,7 +11,7 @@ module Ozonetel
       @campaign_name = campaign_name
     end
 
-    def agent_manual_dial(agent_id, customer_number)
+    def manual_dial_online(agent_id, customer_number)
       data = {
         'username' => @user_name,
         'api_key' => @api_key,

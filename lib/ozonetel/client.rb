@@ -27,7 +27,6 @@ module Ozonetel
     def cod_confirmation_call(call_data)
       call_data.merge!({ 'api_key' => @api_key, 'campaign_name' => @campaign_name })
       call_response = HTTParty.get(ADD_DATA_URL, :query => call_data)
-      parse_response(call_response)
     end
 
     private

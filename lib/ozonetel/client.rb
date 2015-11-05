@@ -4,6 +4,7 @@ module Ozonetel
   class Client
     include HTTParty
     MANUAL_DIAL_URL = "http://cloudagent.in/CAServices/AgentManualDial.php"
+    ADD_DATA_URL = "http://cloudagent.in/cloudAgentRestAPI/index.php/CloudAgent/CloudAgentAPI/addCamapaignData"
 
     def initialize(customer, api_key, campaign_name)
       @user_name = customer
@@ -21,6 +22,11 @@ module Ozonetel
       }
       call_response = HTTParty.post(MANUAL_DIAL_URL, :body => data)
       parse_response(call_response)
+    end
+
+    def trigger_cod_confirmation_call(call_data)
+      call_data.merge!({ 'api_key' => @api_key, 'campaign_name' => @campaign_name })
+      call_response = HTTParty.get(ADD_DATA_URL, :query => call_data)
     end
 
     private

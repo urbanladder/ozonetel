@@ -9,7 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ["vijay yadav"]
   spec.email         = ["vijaynitt12@yahoo.in"]
   spec.summary       = %q{Rest APIs to interact with ozonetel.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = "https://github.com/urbanladder/ozonetel"
   spec.license       = "MIT"
 

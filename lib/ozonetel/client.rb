@@ -26,7 +26,7 @@ module Ozonetel
     end
 
     def manual_dial_skill(skill, customer_number, uui = nil)
-      data = {
+      call_data = {
         'username' => @user_name,
         'api_key' => @api_key,
         'did' => @did,

@@ -13,19 +13,27 @@ module Ozonetel
       @did = did
     end
 
-    def manual_dial_online(agent_id, customer_number)
-      data = {
-        'username' => @user_name,
-        'api_key' => @api_key,
-        'agentID' => agent_id,
-        'customerNumber' => customer_number,
-        'campaignName' => @campaign_name
-      }
-      call_response = HTTParty.post(MANUAL_DIAL_URL, :body => data)
-      parse_response(call_response)
+    def trigger_cod_confirmation_call(call_data)
+      call_data.merge!({ 'api_key' => @api_key, 'campaign_name' => @campaign_name })
+      call_response = HTTParty.get(ADD_DATA_URL, :query => call_data)
     end
 
-    def manual_dial_skill(skill, customer_number, uui = nil)
+    def manual_dial_online(type, customer_number, skill = nil, agent_id = nil, uui = nil)
+      if type == "skill_to_phone"
+        raise StandardError.new("Wrong arguments passed") unless (skill.nil? and customer_number.nil?)
+        skill_to_phone_dial(customer_number, skill, uui)
+
+      elsif type == "phone_to_skill"
+        raise StandardError.new("Wrong arguments passed") unless (agent_id.nil? and customer_number.nil?)
+        skill_to_phone_dial(customer_number, agent_id)
+
+      else
+        raise StandardError.new("Incorrect type value.")
+      end
+    end
+
+    private
+    def skill_to_phone_dial(customer_number, skill,uui)
       call_data = {
         'username' => @user_name,
         'api_key' => @api_key,
@@ -39,9 +47,17 @@ module Ozonetel
       parse_response(call_response)
     end
 
-    def trigger_cod_confirmation_call(call_data)
-      call_data.merge!({ 'api_key' => @api_key, 'campaign_name' => @campaign_name })
-      call_response = HTTParty.get(ADD_DATA_URL, :query => call_data)
+    private
+    def phone_to_phone_dial(customer_number, agent_id)
+      data = {
+        'username' => @user_name,
+        'api_key' => @api_key,
+        'agentID' => agent_id,
+        'customerNumber' => customer_number,
+        'campaignName' => @campaign_name
+      }
+      call_response = HTTParty.post(MANUAL_DIAL_URL, :body => data)
+      parse_response(call_response)
     end
 
     private

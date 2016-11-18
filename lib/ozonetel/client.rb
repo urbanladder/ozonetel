@@ -20,11 +20,11 @@ module Ozonetel
 
     def manual_dial_online(type, customer_number, skill = nil, agent_id = nil, uui = nil)
       if type == "skill_to_phone"
-        raise StandardError.new("Wrong arguments passed") unless (skill.nil? and customer_number.nil?)
+        raise StandardError.new("Wrong arguments passed") if (skill.nil? or customer_number.nil?)
         skill_to_phone_dial(customer_number, skill, uui)
 
       elsif type == "phone_to_skill"
-        raise StandardError.new("Wrong arguments passed") unless (agent_id.nil? and customer_number.nil?)
+        raise StandardError.new("Wrong arguments passed") if (agent_id.nil? or customer_number.nil?)
         skill_to_phone_dial(customer_number, agent_id)
 
       else

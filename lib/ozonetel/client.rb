@@ -23,7 +23,7 @@ module Ozonetel
         raise StandardError.new("Wrong arguments passed") if (skill.nil? or customer_number.nil?)
         skill_to_phone_dial(customer_number, skill, uui)
 
-      elsif type == "phone_to_skill"
+      elsif type == "agent_to_phone"
         raise StandardError.new("Wrong arguments passed") if (agent_id.nil? or customer_number.nil?)
         skill_to_phone_dial(customer_number, agent_id)
 
@@ -48,7 +48,7 @@ module Ozonetel
     end
 
     private
-    def phone_to_phone_dial(customer_number, agent_id)
+    def agent_to_phone_dial(customer_number, agent_id)
       data = {
         'username' => @user_name,
         'api_key' => @api_key,

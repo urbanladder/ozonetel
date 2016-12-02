@@ -6,13 +6,49 @@ module Ozonetel
     MANUAL_DIAL_URL = "http://cloudagent.in/CAServices/AgentManualDial.php"
     ADD_DATA_URL = "http://cloudagent.in/cloudAgentRestAPI/index.php/CloudAgent/CloudAgentAPI/addCamapaignData"
 
-    def initialize(customer, api_key, campaign_name)
+    def initialize(customer, api_key, campaign_name, did = nil)
       @user_name = customer
       @api_key = api_key
       @campaign_name = campaign_name
+      @did = did
     end
 
-    def manual_dial_online(agent_id, customer_number)
+    def trigger_cod_confirmation_call(call_data)
+      call_data.merge!({ 'api_key' => @api_key, 'campaign_name' => @campaign_name })
+      call_response = HTTParty.get(ADD_DATA_URL, :query => call_data)
+    end
+
+    def manual_dial_online(type, customer_number, skill = nil, agent_id = nil, uui = nil)
+      if type == "skill_to_phone"
+        raise StandardError.new("Wrong arguments passed") if (skill.nil? or customer_number.nil?)
+        skill_to_phone_dial(customer_number, skill, uui)
+
+      elsif type == "agent_to_phone"
+        raise StandardError.new("Wrong arguments passed") if (agent_id.nil? or customer_number.nil?)
+        skill_to_phone_dial(customer_number, agent_id)
+
+      else
+        raise StandardError.new("Incorrect type value.")
+      end
+    end
+
+    private
+    def skill_to_phone_dial(customer_number, skill,uui)
+      call_data = {
+        'username' => @user_name,
+        'api_key' => @api_key,
+        'did' => @did,
+        'campaignName' => @campaign_name,
+        'skill' => skill,
+        'customerNumber' => customer_number,
+        'uui' => uui
+      }
+      call_response = HTTParty.get(MANUAL_DIAL_URL, :query => call_data)
+      parse_response(call_response)
+    end
+
+    private
+    def agent_to_phone_dial(customer_number, agent_id)
       data = {
         'username' => @user_name,
         'api_key' => @api_key,
@@ -22,11 +58,6 @@ module Ozonetel
       }
       call_response = HTTParty.post(MANUAL_DIAL_URL, :body => data)
       parse_response(call_response)
-    end
-
-    def trigger_cod_confirmation_call(call_data)
-      call_data.merge!({ 'api_key' => @api_key, 'campaign_name' => @campaign_name })
-      call_response = HTTParty.get(ADD_DATA_URL, :query => call_data)
     end
 
     private

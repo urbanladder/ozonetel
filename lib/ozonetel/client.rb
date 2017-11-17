@@ -3,8 +3,8 @@ require 'httparty'
 module Ozonetel
   class Client
     include HTTParty
-    MANUAL_DIAL_URL = "http://cloudagent.in/CAServices/AgentManualDial.php"
-    ADD_DATA_URL = "http://cloudagent.in/cloudAgentRestAPI/index.php/CloudAgent/CloudAgentAPI/addCamapaignData"
+    MANUAL_DIAL_URL = "http://api1.cloudagent.in/CAServices/AgentManualDial.php"
+    ADD_DATA_URL = "http://api1.cloudagent.in/cloudAgentRestAPI/index.php/CloudAgent/CloudAgentAPI/addCamapaignData"
 
     def initialize(customer, api_key, campaign_name, did = nil)
       @user_name = customer
